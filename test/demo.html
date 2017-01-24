@@ -17,7 +17,9 @@
         overflow: hidden;
     }
     .parallax {
+        position: relative;
         height: 100%;
+        opacity: .3; /*todo*/
     }
     .page {
         float: left;
@@ -49,5 +51,35 @@
     <div class="page page4"></div>
     <div class="page page5"></div>
 </div>
+div#
+<script src="libs/jquery-1.12.4.min.js"></script>
+<script src="../jquery.mousewheel.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var pageWidth = $(window).width();
+        var $parallax = $('#parallax');
+        var $pages = $parallax.find('.page');
+        var len = $pages.length;
+        var factor = 100;
+        var y = 0, x = 0;
+        $pages.width(pageWidth);
+        $parallax
+                .width(pageWidth * len);
+        $(document)
+                .on('mousewheel', function (event) {
+                    y = event.deltaY;
+                    x += y * factor;
+                    console.log(x);
+                    // 不超出左右边界
+                    x = x >= 0 ? 0 : x; // 左边界
+                    x = x <= -pageWidth * (len - 1) ? -pageWidth * (len - 1) : x; // 右边界
+                    $parallax.css({
+                        // todo: css3 前缀
+//                        transform: 'translateX(' + x + 'px)'
+                        left: x + 'px'
+                    });
+                });
+    });
+</script>
 </body>
 </html>
