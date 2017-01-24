@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="no-js">
 <head>
 <meta charset="UTF-8">
 <title>demo</title>
@@ -52,6 +52,7 @@
         margin-top: -110px;
     }
     .pagination a {
+        position: relative;
         display: block;
         background-color: #dbdbdb;
         width: 40px;
@@ -95,8 +96,7 @@
         var $paginationItems = $pagination.find('a');
         var $pages = $parallax.find('.page');
         var len = $pages.length;
-        var factor = 100;
-        var y = 0, x = 0;
+        var y = 0;
         var currentPage = 0;
         var canMove = true;
         var ifBind = false;
@@ -106,10 +106,8 @@
             y = event.deltaY;
             if (y < 0) {
                 currentPage++;
-//                x = -pageWidth;
             } else {
                 currentPage--;
-//                x = pageWidth;
             }
             // 不超出左右边界
             if (currentPage < 0) {
@@ -127,19 +125,19 @@
                 ifBind = true;
             }
             if (canMove) {
-                console.log('move');
                 move(currentPage * (-pageWidth));
             }
         };
         var move = function (left) {
             $paginationItems.removeClass('active').eq(currentPage).addClass('active');
             $parallax.stop().animate({
-                // todo: css3 前缀
-//                        transform: 'translateX(' + x + 'px)'
                 left: left
-            }, speed, function () {
-                if (ifBind) {
-                    $(document).on('mousewheel', scrollHandler);
+            }, {
+                duration: speed,
+                complete: function () {
+                    if (ifBind) {
+                        $(document).on('mousewheel', scrollHandler);
+                    }
                 }
             });
         };
