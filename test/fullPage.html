@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>demo</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+    .wrapper {
+        height: 100%;
+        overflow: hidden;
+    }
+    .parallax {
+        position: relative;
+        height: 100%;
+        opacity: .3;
+    }
+    .page {
+        float: left;
+        width: 20%;
+        height: 100%;
+        color: #ffffff;
+        font-weight: bold;
+        font: 300px/3 Arial;
+        text-align: center;
+    }
+    .page1 {
+        background-color: red;
+    }
+    .page2 {
+        background-color: orange;
+    }
+    .page3 {
+        background-color: yellow;
+    }
+    .page4 {
+        background-color: green;
+    }
+    .page5 {
+        background-color: cyan;
+    }
+    .pagination {
+        position: fixed;
+        left: 10px;
+        top: 50%;
+        margin-top: -110px;
+    }
+    .pagination a {
+        display: block;
+        background-color: #dbdbdb;
+        width: 40px;
+        height: 40px;
+        margin-bottom: 5px;
+        border-radius: 20px;
+        color: #ffffff;
+        font: bold 20px/40px Arial;
+        text-decoration: none;
+        text-align: center;
+    }
+    .pagination .active {
+        background-color: #fff;
+        color: #9f9f9f;
+    }
+</style>
+</head>
+<body>
+<div class="parallax" id="parallax">
+    <div class="page page1">1</div>
+    <div class="page page2">2</div>
+    <div class="page page3">3</div>
+    <div class="page page4">4</div>
+    <div class="page page5">5</div>
+</div>
+<div id="pagination" class="pagination">
+    <a href="#">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#">5</a>
+</div>
+<script src="libs/jquery-1.12.4.min.js"></script>
+<script src="../jquery.mousewheel.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var speed = 1000;
+        var pageWidth = $(window).width();
+        var $parallax = $('#parallax');
+        var $pagination = $('#pagination');
+        var $paginationItems = $pagination.find('a');
+        var $pages = $parallax.find('.page');
+        var len = $pages.length;
+        var factor = 100;
+        var y = 0, x = 0;
+        var currentPage = 0;
+        var canMove = true;
+        var ifBind = false;
+        $pages.width(pageWidth);
+        $parallax.width(pageWidth * len);
+        var scrollHandler = function (event) {
+            y = event.deltaY;
+            if (y < 0) {
+                currentPage++;
+//                x = -pageWidth;
+            } else {
+                currentPage--;
+//                x = pageWidth;
+            }
+            // 不超出左右边界
+            if (currentPage < 0) {
+                // 左边界
+                currentPage = 0;
+                canMove = false;
+            } else if (currentPage > len - 1) {
+                // 右边界
+                currentPage = len - 1;
+                canMove = false;
+            } else {
+                canMove = true;
+                // 滚动开始后解除绑定，滚动结束后重新绑定
+                $(document).off('mousewheel');
+                ifBind = true;
+            }
+            if (canMove) {
+                console.log('move');
+                move(currentPage * (-pageWidth));
+            }
+        };
+        var move = function (left) {
+            $paginationItems.removeClass('active').eq(currentPage).addClass('active');
+            $parallax.stop().animate({
+                // todo: css3 前缀
+//                        transform: 'translateX(' + x + 'px)'
+                left: left
+            }, speed, function () {
+                if (ifBind) {
+                    $(document).on('mousewheel', scrollHandler);
+                }
+            });
+        };
+        $(document).on('mousewheel', scrollHandler);
+        $pagination.on('click', 'a', function (event) {
+            event.preventDefault();
+            var $this = $(this);
+            currentPage = $this.index();
+            move(currentPage * (-pageWidth));
+        });
+        $paginationItems.eq(0).click();
+    });
+</script>
+</body>
+</html>
