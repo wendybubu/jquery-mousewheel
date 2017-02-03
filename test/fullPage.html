@@ -19,7 +19,6 @@
     .parallax {
         position: relative;
         height: 100%;
-        opacity: .3;
     }
     .page {
         float: left;
@@ -31,19 +30,25 @@
         text-align: center;
     }
     .page1 {
-        background-color: red;
+        background-color: #ffb3b3;
     }
     .page2 {
-        background-color: orange;
+        background-color: #ffe4b3;
     }
     .page3 {
-        background-color: yellow;
+        background-color: #dada81;
     }
     .page4 {
-        background-color: green;
+        background-color: #b3d9b3;
     }
     .page5 {
-        background-color: cyan;
+        background-color: #b3ffff;
+    }
+    .page6 {
+        background-color: #9bcede;
+    }
+    .page7 {
+        background-color: #b3b3ff;
     }
     .pagination {
         position: fixed;
@@ -77,6 +82,8 @@
     <div class="page page3">3</div>
     <div class="page page4">4</div>
     <div class="page page5">5</div>
+    <div class="page page6">6</div>
+    <div class="page page7">7</div>
 </div>
 <div id="pagination" class="pagination">
     <a href="#">1</a>
@@ -84,12 +91,14 @@
     <a href="#">3</a>
     <a href="#">4</a>
     <a href="#">5</a>
+    <a href="#">6</a>
+    <a href="#">7</a>
 </div>
 <script src="libs/jquery-1.12.4.min.js"></script>
 <script src="../jquery.mousewheel.min.js"></script>
 <script>
     $(document).ready(function () {
-        var speed = 1000;
+        var speed = 300;
         var pageWidth = $(window).width();
         var $parallax = $('#parallax');
         var $pagination = $('#pagination');
